@@ -8,6 +8,10 @@ on:
         required: true
         type: string
 
+defaults:
+  run:
+    working-directory: services/user
+
 jobs:
   build:
     runs-on: ubuntu-latest
