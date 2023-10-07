@@ -9,5 +9,4 @@ FROM gcr.io/distroless/nodejs:18 as runner
 COPY --from=builder /app/src /app/src
 WORKDIR /app/src
 
-EXPOSE 3000
 CMD ["./bin/www"]
