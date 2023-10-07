@@ -1,5 +1,5 @@
 # Building the binary of the App
-FROM docker.io/library/golang:1.21.1-alpine AS build
+FROM docker.io/library/golang:1.21.1-alpine AS builder
 
 # `boilerplate` should be replaced with your project name
 WORKDIR /go/src/boilerplate
@@ -18,10 +18,6 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o app 
 FROM docker.io/library/alpine as release
 
 WORKDIR /app
-
-# Create the `public` dir and copy all the assets into it
-RUN mkdir ./static
-COPY ./static ./static
 
 # `boilerplate` should be replaced here as well
 COPY --from=build /go/src/boilerplate/app .
