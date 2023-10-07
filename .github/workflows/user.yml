@@ -9,8 +9,8 @@ on:
       - services/user/**
 
 jobs:
-  build:
-    uses: ./.github/workflows/go-workflow.yml
+  test:
+    uses: ./.github/workflows/go-workflows/go-test.yml
     with:
       service: user
 ...
