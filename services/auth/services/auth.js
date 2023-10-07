@@ -1,7 +1,5 @@
-const dotenv = require('dotenv');
 const jsonwebtoken = require('jsonwebtoken');
 
-dotenv.config({ path: '.env' });
 const JWT_SECRET = process.env.JWT_SECRET;
 const ADMIN_PASS = process.env.ADMIN_PASS;
 
