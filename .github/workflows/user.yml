@@ -12,5 +12,5 @@ jobs:
   build:
     uses: ./.github/workflows/go-workflow.yml
     with:
-      service: services/user
+      service: user
 ...
