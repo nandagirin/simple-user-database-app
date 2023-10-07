@@ -1,0 +1,52 @@
+---
+name: Go Test Workflow
+
+on:
+  workflow_call:
+    inputs:
+      service:
+        required: true
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/${{ inputs.service }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+      - name: Test
+        run: go test -v ./...
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/${{ inputs.service }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+      - name: Run Golint
+        uses: reviewdog/action-golangci-lint@v2
+        with:
+          golangci_lint_flags: "--tests=false"
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/${{ inputs.service }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build
+        run: |-
+          docker build \
+            --tag "test/${{ inputs.service }}" \
+            .
+...
