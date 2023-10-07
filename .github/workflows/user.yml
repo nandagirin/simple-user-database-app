@@ -20,6 +20,9 @@ jobs:
     with:
       service: user
   build-and-publish:
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/container-build.yml
     if: ${{ github.event == 'pull_request' }}
     with:
