@@ -1,0 +1,16 @@
+---
+name: User Service
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - services/user/**/*
+
+jobs:
+  build:
+    uses: ./.github/workflows/go-workflow.yml
+    with:
+      service: user
+...
