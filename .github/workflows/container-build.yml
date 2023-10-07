@@ -20,6 +20,10 @@ jobs:
       contents: read
       packages: write
 
+    defaults:
+      run:
+        working-directory: services/${{ inputs.service }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -40,7 +44,6 @@ jobs:
             type=sha,format=long,event=pr
 
       - name: Build and push Docker image
-        working-directory: services/${{ inputs.service }}
         uses: docker/build-push-action@v5
         with:
           context: .
