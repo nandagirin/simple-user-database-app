@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    uses: ./.github/workflows/go-workflows/go-test.yml
+    uses: ./.github/workflows/go-test.yml
     with:
       service: user
 ...
