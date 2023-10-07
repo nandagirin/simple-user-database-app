@@ -1,4 +1,3 @@
-const dotenv = require('dotenv');
 const request = require('supertest');
 const app = require('../app.js')
 const ADMIN_PASS = process.env.ADMIN_PASS;
