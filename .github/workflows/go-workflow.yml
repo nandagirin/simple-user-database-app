@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: service/${{ inputs.service }}
+        working-directory: services/${{ inputs.service }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Go
