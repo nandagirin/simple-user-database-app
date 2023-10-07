@@ -10,6 +10,9 @@
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
       "/node_modules/"
+    ],
+    "setupFiles": [
+      "<rootDir>/.jest/vars.js"
     ]
   },
   "dependencies": {
