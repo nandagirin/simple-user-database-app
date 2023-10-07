@@ -8,6 +8,10 @@ on:
     paths:
       - services/user/**
 
+defaults:
+  run:
+    working-directory: services/user
+
 jobs:
   build:
     uses: ./.github/workflows/go-workflow.yml
