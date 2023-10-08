@@ -65,9 +65,9 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-        tags:
+        tags: |
+          type=match,pattern=${{ inputs.service }}-v(.*),group=1,event=tag
           type=sha,format=long,event=branch
-          type=match,pattern=${{ inputs.service }}-v(.*),group=1
     
     # Set up kustomize
     - name: Set up Kustomize
