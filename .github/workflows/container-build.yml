@@ -38,6 +38,7 @@ jobs:
           tags: |
             type=match,pattern=${{ inputs.service }}-v(.*),group=1,event=tag
             type=sha,format=long,event=branch
+            type=match,pattern=${{ inputs.service }}-v(.*),group=1
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
