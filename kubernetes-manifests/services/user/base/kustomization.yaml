@@ -5,5 +5,4 @@ kind: Kustomization
 resources:
 - service.yaml
 - deployment.yaml
-- secret.yaml
 ...
