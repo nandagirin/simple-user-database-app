@@ -3,6 +3,8 @@ name: Auth Service
 
 on:
   push:
+    tags:
+      - auth-v*
     branches:
       - main
     paths:
@@ -13,11 +15,6 @@ on:
       - release/auth/**
     paths:
       - services/auth/**
-  create:
-    tags:
-      - auth-v**
-    tags-ignore:
-      - '!auth-v**'
 
 jobs:
   test:
@@ -40,7 +37,7 @@ jobs:
       contents: read
       packages: write
     uses: ./.github/workflows/container-image-build.yml
-    if: ${{ github.event_name == 'create' && contains(github.ref_name, 'rc') }}
+    if: ${{ github.event_name == 'push' && contains(github.ref_name, 'rc') }}
     with:
       service: auth
 
@@ -69,7 +66,7 @@ jobs:
       contents: read
       id-token: write
     uses: ./.github/workflows/deploy-gke.yml
-    if: ${{ github.event_name == 'create' && contains(github.ref_name, 'rc') }}
+    if: ${{ github.event_name == 'push' && contains(github.ref_name, 'rc') }}
     secrets:
       gke_project: ${{ secrets.GKE_PROJECT }}
       gke_cluster: ${{ secrets.GKE_CLUSTER }}
@@ -86,7 +83,7 @@ jobs:
       contents: read
       packages: write
     uses: ./.github/workflows/container-image-publish.yml
-    if: ${{ github.event_name == 'create' && !contains(github.ref_name, 'rc') }}
+    if: ${{ github.event_name == 'push' && !contains(github.ref_name, 'rc') }}
     with:
       service: auth
   deploy-prd:
@@ -96,7 +93,7 @@ jobs:
       contents: read
       id-token: write
     uses: ./.github/workflows/deploy-gke.yml
-    if: ${{ github.event_name == 'create' && !contains(github.ref_name, 'rc') }}
+    if: ${{ github.event_name == 'push' && !contains(github.ref_name, 'rc') }}
     secrets:
       gke_project: ${{ secrets.GKE_PROJECT }}
       gke_cluster: ${{ secrets.GKE_CLUSTER }}
