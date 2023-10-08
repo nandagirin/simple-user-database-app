@@ -11,5 +11,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/auth', router.authRouter);
+app.use('/healthz', router.healthCheckRouter);
 
 module.exports = app;
