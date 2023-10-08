@@ -1,7 +1,7 @@
 
 # User Service
 
-This simple service handles client request to add users to in-memory database and get the list of those users. This service is built using [GoFiber boilerplate](https://github.com/gofiber/boilerplate).
+This simple service handles client request to add users to in-memory database and get the list of those users. This service is built using [GoFiber boilerplate](https://github.com/gofiber/boilerplate) with addition in token handling.
 
 
 ## Environment Variables
