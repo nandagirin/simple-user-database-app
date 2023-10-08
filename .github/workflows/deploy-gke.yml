@@ -67,7 +67,7 @@ jobs:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         tags:
           type=sha,format=long,event=branch
-          type=semver,pattern={{version}}
+          type=match,pattern=${{ inputs.service }}-v(.*),group=1
     
     # Set up kustomize
     - name: Set up Kustomize
