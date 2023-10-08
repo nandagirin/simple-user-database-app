@@ -29,7 +29,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/container-build.yml
+    uses: ./.github/workflows/container-image-build.yml
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     with:
       service: user
@@ -37,12 +37,12 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/container-build.yml
+    uses: ./.github/workflows/container-image-build.yml
     if: ${{ github.event_name == 'create' && contains(github.ref_name, 'rc') }}
     with:
       service: user
 
-  # Deployment to three environments
+  # Deployment to GKE
   deploy-dev:
     needs:
       - build-and-publish-dev
@@ -77,21 +77,31 @@ jobs:
     with:
       service: user
       environment: stg
-  # deploy-prd:
-  #   needs:
-  #     - build-and-publish
-  #   permissions:
-  #     contents: read
-  #     id-token: write
-  #   uses: ./.github/workflows/deploy-gke.yml
-  #   if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-  #   secrets:
-  #     gke_project: ${{ secrets.GKE_PROJECT }}
-  #     gke_cluster: ${{ secrets.GKE_CLUSTER }}
-  #     gke_region: ${{ secrets.GKE_REGION }}
-  #     workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-  #     service_account: ${{ secrets.SERVICE_ACCOUNT }}
-  #   with:
-  #     service: user
-  #     environment: prd
+
+  # Production deployment
+  publish-prd:
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/container-image-deploy.yml
+    if: ${{ github.event_name == 'create' && !contains(github.ref_name, 'rc') }}
+    with:
+      service: user
+  deploy-prd:
+    needs:
+      - publish-prd
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/deploy-gke.yml
+    if: ${{ github.event_name == 'create' && !contains(github.ref_name, 'rc') }}
+    secrets:
+      gke_project: ${{ secrets.GKE_PROJECT }}
+      gke_cluster: ${{ secrets.GKE_CLUSTER }}
+      gke_region: ${{ secrets.GKE_REGION }}
+      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      service_account: ${{ secrets.SERVICE_ACCOUNT }}
+    with:
+      service: user
+      environment: prd
 ...
