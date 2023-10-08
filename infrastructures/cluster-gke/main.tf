@@ -64,3 +64,46 @@ resource "kubernetes_secret" "registry_secret" {
     })
   }
 }
+
+#
+# SERVICES SECRET
+#
+resource "random_password" "admin_pass" {
+  for_each = { for env in local.envs : env => env }
+  length   = 16
+}
+resource "random_password" "jwt_secret" {
+  for_each = { for env in local.envs : env => env }
+  length   = 64
+}
+
+resource "kubernetes_secret" "auth_secret" {
+  for_each = { for env in local.envs : env => env }
+
+  metadata {
+    name      = "auth"
+    namespace = kubernetes_namespace.ns[each.key].metadata.0.name
+  }
+
+  type = "Opaque"
+
+  data = {
+    ADMIN_PASS = random_password.admin_pass[each.key].result
+    JWT_SECRET = random_password.jwt_secret[each.key].result
+  }
+}
+
+resource "kubernetes_secret" "user_secret" {
+  for_each = { for env in local.envs : env => env }
+
+  metadata {
+    name      = "user"
+    namespace = kubernetes_namespace.ns[each.key].metadata.0.name
+  }
+
+  type = "Opaque"
+
+  data = {
+    JWT_SECRET = random_password.jwt_secret[each.key].result
+  }
+}
