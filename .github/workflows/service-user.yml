@@ -37,10 +37,10 @@ jobs:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     with:
       service: user
-      gke_project: ${{ secret.GKE_PROJECT }}
-      gke_cluster: ${{ secret.GKE_CLUSTER }}
-      gke_region: ${{ secret.GKE_REGION }}
-      workload_identity_provider: ${{ secret.WORKLOAD_IDENTITY_PROVIDER }}
-      service_account: ${{ secret.SERVICE_ACCOUNT }}
+      gke_project: ${{ secrets.GKE_PROJECT }}
+      gke_cluster: ${{ secrets.GKE_CLUSTER }}
+      gke_region: ${{ secrets.GKE_REGION }}
+      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      service_account: ${{ secrets.SERVICE_ACCOUNT }}
       environment: dev
 ...
