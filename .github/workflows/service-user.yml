@@ -16,6 +16,8 @@ on:
   create:
     tags:
       - user-v**
+    tags-ignore:
+      - '!user-v**'
 
 jobs:
   test:
