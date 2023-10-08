@@ -78,7 +78,8 @@ jobs:
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
-        ./kustomize edit set image ${{ steps.meta.outputs.tags }}
+        IMAGE_TAG=$(echo ${{ steps.meta.outputs.tags }} | awk 'NR == 1 {print}')
+        ./kustomize edit set image $IMAGE_TAG
         ./kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/${{ inputs.service }} -n ${{ inputs.environment }}
         kubectl get services -o wide -n ${{ inputs.environment }}
