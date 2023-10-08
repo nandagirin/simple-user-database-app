@@ -13,19 +13,14 @@ on:
     secrets:
       gke_project:
         required: true
-        type: string
       gke_cluster:
         required: true
-        type: string
       gke_region:
         required: true
-        type: string
       workload_identity_provider:
         required: true
-        type: string
       service_account:
         required: true
-        type: string
 
 env:
   REGISTRY: ghcr.io
