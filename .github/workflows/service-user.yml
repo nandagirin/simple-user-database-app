@@ -27,4 +27,21 @@ jobs:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     with:
       service: user
+  deploy:
+    needs:
+      - build-and-publish
+    permissions:
+      permissions:
+        contents: read
+        id-token: write
+      uses: ./.github/workflows/deploy-gke.yml
+      if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+      with:
+        service: user
+        gke_project: ${{ secret.GKE_PROJECT }}
+        gke_cluster: ${{ secret.GKE_CLUSTER }}
+        gke_region: ${{ secret.GKE_REGION }}
+        workload_identity_provider: ${{ secret.WORKLOAD_IDENTITY_PROVIDER }}
+        service_account: ${{ secret.SERVICE_ACCOUNT }}
+        environment: dev
 ...
