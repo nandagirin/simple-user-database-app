@@ -28,6 +28,7 @@ func init() {
 	app = fiber.New(fiber.Config{})
 	app.Get("/users", UserList)
 	app.Post("/users", UserCreate)
+	app.Get("/healthz", Health)
 }
 
 func TestUserListOk(t *testing.T) {
@@ -44,7 +45,7 @@ func TestUserListUnauthorized(t *testing.T) {
 	req.Header.Set("Authorization", "Bearer "+jwtTokenInvalid)
 	resp, _ := app.Test(req)
 	if resp.StatusCode != fiber.StatusForbidden {
-		t.Fatalf("Expected status code is %d, but got %d", fiber.StatusOK, resp.StatusCode)
+		t.Fatalf("Expected status code is %d, but got %d", fiber.StatusForbidden, resp.StatusCode)
 	}
 }
 
@@ -62,6 +63,14 @@ func TestUserCreate(t *testing.T) {
 
 	req := httptest.NewRequest("POST", "http://localhost:8080/users", bytes.NewBuffer(out))
 	req.Header.Set("Authorization", "Bearer "+jwtTokenValid)
+	resp, _ := app.Test(req)
+	if resp.StatusCode != fiber.StatusOK {
+		t.Fatalf("Expected status code is %d, but got %d", fiber.StatusOK, resp.StatusCode)
+	}
+}
+
+func TestHealth(t *testing.T) {
+	req := httptest.NewRequest("GET", "http://localhost:8080/healthz", nil)
 	resp, _ := app.Test(req)
 	if resp.StatusCode != fiber.StatusOK {
 		t.Fatalf("Expected status code is %d, but got %d", fiber.StatusOK, resp.StatusCode)

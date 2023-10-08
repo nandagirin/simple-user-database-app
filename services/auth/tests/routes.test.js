@@ -25,3 +25,11 @@ describe('Auth endpoint', () => {
     expect(res.body).not.toHaveProperty('token');
   });
 });
+
+describe('Health endpoint', () => {
+  it('should return 200 response code', async () => {
+    const res = await request(app)
+      .get('/healthz');
+    expect(res.statusCode).toEqual(200);
+  });
+});
