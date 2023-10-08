@@ -83,7 +83,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/container-image-deploy.yml
+    uses: ./.github/workflows/container-image-publish.yml
     if: ${{ github.event_name == 'create' && !contains(github.ref_name, 'rc') }}
     with:
       service: user
