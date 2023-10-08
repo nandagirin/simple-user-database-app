@@ -10,8 +10,12 @@ on:
   pull_request:
     branches:
       - main
+      - release/auth/**
     paths:
       - services/auth/**
+  create:
+    tags:
+      - auth-v*
 
 jobs:
   test:
@@ -19,12 +23,85 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     with:
       service: auth
-  build-and-publish:
+  
+  # Build pipeline
+  build-and-publish-dev:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/container-build.yml
+    uses: ./.github/workflows/container-image-build.yml
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     with:
       service: auth
+  build-and-publish-stg:
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/container-image-build.yml
+    if: ${{ github.event_name == 'create' && contains(github.ref_name, 'rc') }}
+    with:
+      service: auth
+
+  # Deployment to GKE
+  deploy-dev:
+    needs:
+      - build-and-publish-dev
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/deploy-gke.yml
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+    secrets:
+      gke_project: ${{ secrets.GKE_PROJECT }}
+      gke_cluster: ${{ secrets.GKE_CLUSTER }}
+      gke_region: ${{ secrets.GKE_REGION }}
+      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      service_account: ${{ secrets.SERVICE_ACCOUNT }}
+    with:
+      service: auth
+      environment: dev
+  deploy-stg:
+    needs:
+      - build-and-publish-stg
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/deploy-gke.yml
+    if: ${{ github.event_name == 'create' && contains(github.ref_name, 'rc') }}
+    secrets:
+      gke_project: ${{ secrets.GKE_PROJECT }}
+      gke_cluster: ${{ secrets.GKE_CLUSTER }}
+      gke_region: ${{ secrets.GKE_REGION }}
+      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      service_account: ${{ secrets.SERVICE_ACCOUNT }}
+    with:
+      service: auth
+      environment: stg
+
+  # Production deployment
+  publish-prd:
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/container-image-publish.yml
+    if: ${{ github.event_name == 'create' && !contains(github.ref_name, 'rc') }}
+    with:
+      service: auth
+  deploy-prd:
+    needs:
+      - publish-prd
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/deploy-gke.yml
+    if: ${{ github.event_name == 'create' && !contains(github.ref_name, 'rc') }}
+    secrets:
+      gke_project: ${{ secrets.GKE_PROJECT }}
+      gke_cluster: ${{ secrets.GKE_CLUSTER }}
+      gke_region: ${{ secrets.GKE_REGION }}
+      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      service_account: ${{ secrets.SERVICE_ACCOUNT }}
+    with:
+      service: auth
+      environment: prd
 ...
