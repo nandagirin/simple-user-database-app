@@ -36,6 +36,7 @@ func main() {
 	// Bind handlers
 	app.Get("/users", handlers.UserList)
 	app.Post("/users", handlers.UserCreate)
+	app.Get("/healthz", handlers.Health)
 
 	// Handle not founds
 	app.Use(handlers.NotFound)
