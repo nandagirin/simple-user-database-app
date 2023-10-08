@@ -26,5 +26,41 @@ module "gke" {
   enable_private_endpoint    = false
   enable_private_nodes       = true
   master_ipv4_cidr_block     = "10.0.0.0/28"
+}
 
+#
+# GLOBAL K8S RESOURCES
+#
+locals {
+  envs = ["dev", "stg", "prd"]
+}
+
+resource "kubernetes_namespace" "ns" {
+  for_each = { for env in local.envs : env => env }
+  metadata {
+    name = each.value
+  }
+}
+
+resource "kubernetes_secret" "registry_secret" {
+  for_each = { for env in local.envs : env => env }
+
+  metadata {
+    name      = "dockerconfigjson"
+    namespace = kubernetes_namespace.ns[each.key].metadata.0.name
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+
+  data = {
+    ".dockerconfigjson" = jsonencode({
+      auths = {
+        "${var.registry_server}" = {
+          "username" = var.registry_username
+          "password" = var.registry_password
+          "auth"     = base64encode("${var.registry_username}:${var.registry_password}")
+        }
+      }
+    })
+  }
 }
