@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      imagePullSecrets:
+        - name: dockerconfigjson
+      containers:
+        - name: user
+          image: ghcr.io/nandagirin/simple-user-database-app/user:sha-eea8f75224e887f48301984460e3c7b385d276a3
+          args:
+            - -port=:8080
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: user
+          resources:
+            requests:
+              cpu: 16m
+              memory: 16M
+            limits:
+              cpu: 16m
+              memory: 16M
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+...

@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      imagePullSecrets:
+        - name: dockerconfigjson
+      containers:
+        - name: auth
+          image: ghcr.io/nandagirin/simple-user-database-app/auth:sha-eea8f75224e887f48301984460e3c7b385d276a3
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          env:
+            - name: PORT
+              value: '3000'
+          envFrom:
+            - secretRef:
+                name: auth
+          resources:
+            requests:
+              cpu: 32m
+              memory: 32M
+            limits:
+              cpu: 32m
+              memory: 32M
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 3
+...
