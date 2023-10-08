@@ -35,13 +35,13 @@ jobs:
       id-token: write
     uses: ./.github/workflows/deploy-gke.yml
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-    secrets: inherit
-    with:
-      service: user
+    secrets:
       gke_project: ${{ secrets.GKE_PROJECT }}
       gke_cluster: ${{ secrets.GKE_CLUSTER }}
       gke_region: ${{ secrets.GKE_REGION }}
       workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
       service_account: ${{ secrets.SERVICE_ACCOUNT }}
+    with:
+      service: user
       environment: dev
 ...

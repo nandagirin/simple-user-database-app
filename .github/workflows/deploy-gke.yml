@@ -7,6 +7,10 @@ on:
       service:
         required: true
         type: string
+      environment:
+        required: true
+        type: string
+    secrets:
       gke_project:
         required: true
         type: string
@@ -20,9 +24,6 @@ on:
         required: true
         type: string
       service_account:
-        required: true
-        type: string
-      environment:
         required: true
         type: string
 
@@ -53,16 +54,16 @@ jobs:
       uses: 'google-github-actions/auth@v1'
       with:
         token_format: 'access_token'
-        workload_identity_provider: ${{ inputs.workload_identity_provider }}
-        service_account: ${{ inputs.service_account }}
+        workload_identity_provider: ${{ secrets.workload_identity_provider }}
+        service_account: ${{ secrets.service_account }}
 
     # Get the GKE credentials so we can deploy to the cluster
     - name: Set up GKE credentials
       uses: google-github-actions/get-gke-credentials@v1
       with:
-        cluster_name: ${{ inputs.gke_cluster }}
-        location: ${{ inputs.gke_region }}
-        project_id: ${{ inputs.gke_project }}
+        cluster_name: ${{ secrets.gke_cluster }}
+        location: ${{ secrets.gke_region }}
+        project_id: ${{ secrets.gke_project }}
 
     - name: Extract metadata (tags, labels) for Docker
       id: meta
