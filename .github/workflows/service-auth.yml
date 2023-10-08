@@ -15,7 +15,7 @@ on:
       - services/auth/**
   create:
     tags:
-      - auth-v*
+      - auth-v**
 
 jobs:
   test:

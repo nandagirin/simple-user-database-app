@@ -15,7 +15,7 @@ on:
       - services/user/**
   create:
     tags:
-      - user-v*
+      - user-v**
 
 jobs:
   test:
