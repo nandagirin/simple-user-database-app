@@ -14,6 +14,11 @@ on:
       - releases/**
     paths:
       - services/user/**
+  create:
+    branches:
+      - releases/**
+    paths:
+      - services/user/**
 
 jobs:
   test:
@@ -26,7 +31,7 @@ jobs:
       contents: read
       packages: write
     uses: ./.github/workflows/container-build.yml
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' || github.event_name == 'create' }}
     with:
       service: user
 
@@ -55,7 +60,7 @@ jobs:
       contents: read
       id-token: write
     uses: ./.github/workflows/deploy-gke.yml
-    if: ${{ github.event_name == 'push' && startsWith(github.ref_name, 'release/') }}
+    if: ${{ (github.event_name == 'push' && startsWith(github.ref_name, 'release/')) || (github.event_name == 'create' && startsWith(github.ref_name, 'release/')) }}
     secrets:
       gke_project: ${{ secrets.GKE_PROJECT }}
       gke_cluster: ${{ secrets.GKE_CLUSTER }}
