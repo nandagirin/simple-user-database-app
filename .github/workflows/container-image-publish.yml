@@ -40,11 +40,16 @@ jobs:
           flavor: |
             latest=false
 
+      - name: Render image tag
+        id: render-tag
+        run: |
+          echo "tag=$(echo ${{ steps.meta.outputs.tags }} | awk -F ':' '{print $2}')" >> $GITHUB_OUTPUT
+
       - name: Add Semantic Version tag to Docker Image
         uses: shrink/actions-docker-registry-tag@v3
         with:
           registry: ${{ env.REGISTRY }}
           repository: '${{ env.IMAGE_NAME }}'
           target: 'sha-${{ github.sha }}'
-          tags: '${{ steps.meta.outputs.tags }}'
+          tags: '${{ steps.render-tag.outputs.tag }}'
 ...
