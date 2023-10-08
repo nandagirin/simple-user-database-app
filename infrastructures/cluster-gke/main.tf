@@ -107,3 +107,11 @@ resource "kubernetes_secret" "user_secret" {
     JWT_SECRET = random_password.jwt_secret[each.key].result
   }
 }
+
+#
+# IP Reservation for GKE ingress
+#
+resource "google_compute_global_address" "ingress" {
+  for_each = { for env in local.envs : env => env }
+  name     = "sandbox-ingress-${each.key}"
+}
