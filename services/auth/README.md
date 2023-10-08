@@ -65,7 +65,7 @@ We could also run the service using container runtime, such as Docker. To do tha
 After the build process has finished, execute `docker run` to spawn the container. Fill the value of the environment variables `ADMIN_PASS` and `JWT_SECRET` before executing the command.
 
 ```bash
-  podman run --rm -e ADMIN_PASS="" -e JWT_SECRET="" -p 3000:3000 auth:latest
+  docker run --rm -e ADMIN_PASS="" -e JWT_SECRET="" -p 3000:3000 auth:latest
 ```
 
 The command above will spawn a container using previously built container image. The container spawned will have port 3000 opened and mapped to also port 3000 in the host, so we could access it using `http://localhost:3000`.
