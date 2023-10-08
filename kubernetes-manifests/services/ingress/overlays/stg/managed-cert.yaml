@@ -1,0 +1,9 @@
+---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: sandbox-cert
+spec:
+  domains:
+    - 34.111.163.201.sslip.io
+...
