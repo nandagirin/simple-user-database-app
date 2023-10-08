@@ -1,0 +1,47 @@
+---
+name: User Service
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - services/user/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - services/user/**
+
+jobs:
+  test:
+    uses: ./.github/workflows/go-test.yml
+    if: ${{ github.event_name == 'pull_request' }}
+    with:
+      service: user
+  build-and-publish:
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/container-build.yml
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+    with:
+      service: user
+  deploy:
+    needs:
+      - build-and-publish
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/deploy-gke.yml
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+    secrets:
+      gke_project: ${{ secrets.GKE_PROJECT }}
+      gke_cluster: ${{ secrets.GKE_CLUSTER }}
+      gke_region: ${{ secrets.GKE_REGION }}
+      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      service_account: ${{ secrets.SERVICE_ACCOUNT }}
+    with:
+      service: user
+      environment: dev
+...
