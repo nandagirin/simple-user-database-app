@@ -1,5 +1,5 @@
 ---
-name: Go Build Workflow
+name: Container Image Publish Workflow
 
 on:
   workflow_call:
@@ -37,14 +37,14 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=match,pattern=${{ inputs.service }}-v(.*),group=1,event=tag
-            type=sha,format=long,event=branch
-            type=match,pattern=${{ inputs.service }}-v(.*),group=1
+          flavor: |
+            latest=false
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+      - name: Add Semantic Version tag to Docker Image
+        uses: shrink/actions-docker-registry-tag@v3
         with:
-          context: services/${{ inputs.service }}
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          registry: ${{ env.REGISTRY }}
+          repository: '${{ env.IMAGE_NAME }}'
+          target: 'sha-${{ github.sha }}'
+          tags: '${{ steps.meta.outputs.tags }}'
 ...
