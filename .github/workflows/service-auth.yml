@@ -16,8 +16,6 @@ on:
   create:
     tags:
       - auth-v**
-    tags-ignore:
-      - '!auth-v**'
 
 jobs:
   test:
