@@ -13,8 +13,8 @@ on:
     branches:
       - main
       - release/user/**
-    paths:
-      - services/user/**
+    # paths:
+    #   - services/user/**
 
 jobs:
   test:
