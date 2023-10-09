@@ -37,7 +37,6 @@ jobs:
         with:
           golangci_lint_flags: "--enable-all --exclude-use-default=false"
           go_version: '1.21'
-          filter_mode: nofilter
   build:
     runs-on: ubuntu-latest
     defaults:
