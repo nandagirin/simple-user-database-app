@@ -13,3 +13,18 @@ sequenceDiagram
     client->>+user: GET /users (list users)
     user->>-client: return list of users
 ```
+## Service Architecture Diagram
+
+```mermaid
+flowchart TD
+    A[HTTPS GCLB]
+    B[GKE Ingress]
+    C[Auth Service Pods]
+    D[User Service Pods]
+    E[Client]
+
+    E --> A
+    A --> B
+    B --> C
+    B --> D
+```
