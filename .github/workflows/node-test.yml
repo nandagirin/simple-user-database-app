@@ -40,6 +40,7 @@ jobs:
           eslint-args: '--ignore-path=.gitignore --quiet'
           extensions: 'js'
           annotations: true
+          use-npx: true
   build:
     runs-on: ubuntu-latest
     defaults:
