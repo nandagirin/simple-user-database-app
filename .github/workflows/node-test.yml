@@ -32,15 +32,9 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 18.x
       - run: npm ci
-      - uses: sibiraj-s/action-eslint@v3
-        with:
-          all-files: true
-          eslint-args: '--ignore-path=.gitignore --quiet'
-          extensions: 'js'
-          annotations: true
-          use-npx: true
+      - run: npx eslint ./
   build:
     runs-on: ubuntu-latest
     defaults:
