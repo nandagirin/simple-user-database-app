@@ -56,6 +56,12 @@ Response that is received.
 
 ## Documentation
 
+Refer to below links to check service documentations.
+
+- [Auth service](services/auth/README.md)
+
+- [User service](services/user/README.md)
+
 Refer to below links to check additional documentations.
 
 - [Architecture documentation](docs/architectures.md)
