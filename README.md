@@ -54,6 +54,15 @@ Response that is received.
 **Infrastructure Provisioning**: Terraform
 
 
+## Documentation
+
+Refer to below links to check additional documentations.
+
+- [Architecture documentation](docs/architectures.md)
+
+- [Development workflow and CI/CD](docs/development-workflow-cicd.md)
+
+
 ## Roadmap
 
 - Add token expiry
