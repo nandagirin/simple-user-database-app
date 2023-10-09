@@ -10,3 +10,4 @@ WORKDIR /app
 COPY --from=builder /app .
 
 ENTRYPOINT ["./app"]
+
