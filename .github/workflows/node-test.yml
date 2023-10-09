@@ -25,6 +25,9 @@ jobs:
       - run: npm test
   eslint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/${{ inputs.service }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
