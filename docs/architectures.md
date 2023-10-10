@@ -15,6 +15,8 @@ sequenceDiagram
 ```
 ## Service Architecture Diagram
 
+If we utilize Terraform scripts provided in this project and trigger the deployment to GKE cluster using also Kubernetes manifests provided in this project, the service architecture diagram of the services deployed on GKE could be seen like below.
+
 ```mermaid
 flowchart TD
     A[HTTPS GCLB]
