@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"sync"
+
 	"user/models"
 )
 
@@ -11,18 +12,20 @@ var (
 	mu sync.Mutex
 )
 
-// Connect with database
+// Connect with database.
 func Connect() {
 	db = make([]*models.User, 0)
 	fmt.Println("Connected with Database")
 }
 
+// Insert user to database.
 func Insert(user *models.User) {
 	mu.Lock()
 	db = append(db, user)
 	mu.Unlock()
 }
 
+// Get list of users from database.
 func Get() []*models.User {
 	return db
 }

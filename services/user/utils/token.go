@@ -8,6 +8,11 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+// This function will validate token from request header
+// `Authorization` and check if the token is valid by
+// comparing it with JWT_SECRET value. If the token is
+// valid, it will return nil error. Otherwise, it will
+// return error.
 func ValidateToken(c *fiber.Ctx) error {
 	secret := os.Getenv("JWT_SECRET")
 	tokenHeader := c.GetReqHeaders()["Authorization"]
