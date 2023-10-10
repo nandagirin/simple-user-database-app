@@ -1,15 +1,13 @@
 package main
 
 import (
-	"user/database"
-	"user/handlers"
-
 	"flag"
 	"log"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"user/database"
+	"user/handlers"
 )
 
 var (
