@@ -18,6 +18,14 @@ Currently, the CI pipeline on pull request supports these execution:
     - Unit test
     - Build test using Docker
 
+#### Pull request pipeline
+
+Push to branch with opened pull request and with changeset in the `services/` folder will trigger a pull request pipeline. In general, we have two workflows based on the language that the service uses, which currently are either Golang or NodeJS. Each workflow has three main jobs, which are unit test execution, linter, and build test using Docker. For unit test and linter execution, each programming language has its own library and script to orchestrate them. For Golang service, we use native unit test library from the languange and `golangci-lint` for linter. As for NodeJS, we use `Jest` to orchestrate the unit test execution and `eslint` for linter.
+
+If the linter job fails due to issue in our code, it will push some annotations to GitHub that will show us the issue in the code via pull request diffs. You could see this PR as example https://github.com/nandagirin/simple-user-database-app/pull/24/files, there are some notes pointing out the issue in our code that should be fixed following the linter standard.
+
+Currently, failing in pull request pipeline does not block the pull request to be merged.
+
 #### Development environment
 
 Upon merging a PR to `main` branch, if the changes including the files beloning to `services/<name of the service>` folder, a CI pipeline will be triggered to execute the build of the specific service.
