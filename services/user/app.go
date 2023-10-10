@@ -41,6 +41,6 @@ func main() {
 	// Handle not founds
 	app.Use(handlers.NotFound)
 
-	// Listen on port 3000
-	log.Fatal(app.Listen(*port)) // go run app.go -port=:3000
+	// Put flags `-port=:8080` for example to start listening in port 8080
+	log.Fatal(app.Listen(*port))
 }

@@ -17,12 +17,14 @@ func Connect() {
 	fmt.Println("Connected with Database")
 }
 
+// Insert user to database
 func Insert(user *models.User) {
 	mu.Lock()
 	db = append(db, user)
 	mu.Unlock()
 }
 
+// Get list of users from database
 func Get() []*models.User {
 	return db
 }
